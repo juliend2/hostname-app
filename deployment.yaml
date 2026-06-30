@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hostname-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hostname-app
+  template:
+    metadata:
+      labels:
+        app: hostname-app
+    spec:
+      containers:
+        - name: hostname-app
+          image: jdesrosiers/hostname-app:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName  # injects the k8s node name
